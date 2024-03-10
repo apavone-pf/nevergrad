@@ -675,7 +675,10 @@ class Optimizer:  # pylint: disable=too-many-instance-attributes
                     sleeper.stop_timer()
                 while self._finished_jobs:
                     x, job = self._finished_jobs[0]
-                    result = job.result()
+                    try:
+                        result = job.result()
+                    except Exception as e:
+                        print(f"Error in job.result(): {e}")
                     if constraint_violation is not None:
                         self.tell(
                             x, result, [f(x.value) for f in constraint_violation]
